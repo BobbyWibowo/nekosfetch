@@ -1,0 +1,20 @@
+{
+  "name": "nekos-life-fetch",
+  "version": "1.0.0",
+  "description": "A simple utility to fetch images from nekos.life by inputting IDs range",
+  "main": "index.js",
+  "author": "Bobby Wibowo",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^2.18.0",
+    "node-fetch": "^2.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-standard": "~11",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "~3"
+  }
+}
