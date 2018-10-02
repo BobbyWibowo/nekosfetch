@@ -2,7 +2,6 @@
   "name": "nekosfetch",
   "version": "1.0.0",
   "description": "A simple utility to fetch image URLs from nekos.life by inputting IDs range.",
-  "main": "index.js",
   "author": "Bobby Wibowo",
   "license": "MIT",
   "dependencies": {
