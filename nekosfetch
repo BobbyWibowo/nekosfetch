@@ -4,7 +4,7 @@ const program = require('commander')
 const fetch = require('node-fetch')
 
 const validate = range => {
-  if (range.some(r => r === undefined)) { return false }
+  if (range.some(r => !r)) { return false } // catch-all falsy values
   if (range[0] <= 0) { return false }
   if (range[0] >= range[1]) { return false }
   return true
@@ -84,6 +84,15 @@ function action (range) {
 program
   .version('1.0.0')
   .usage('[options] <range>')
+  .description('A simple utility to fetch image URLs from nekos.life by inputting IDs range.')
   .option('-v, --verbose', 'Verbose output')
   .action(action)
-  .parse(process.argv)
+
+program.on('--help', () => {
+  console.log('\nExamples:\n')
+  console.log('  $ nekosfetch 1..100   fetch URLs with IDs 1 to 100')
+  console.log('  $ nekosfetch 75..250  fetch URLs with IDs 75 to 250')
+  console.log('  $ nekosfetch 10       fetch URL with ID 10')
+})
+
+program.parse(process.argv)
