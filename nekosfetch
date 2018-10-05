@@ -2,6 +2,11 @@
 
 const program = require('commander')
 const fetch = require('node-fetch')
+const fs = require('fs')
+
+const env = {
+  writeStream: null
+}
 
 const validate = range => {
   if (range.some(r => !r)) { return false } // catch-all falsy values
@@ -22,7 +27,12 @@ const pad = (padding, string, paddingLeft) => {
   return (string + padding).substring(0, padding.length)
 }
 
-function action (range) {
+const log = message => {
+  env.writeStream && env.writeStream.write(`${message}\n`)
+  return console.log(message)
+}
+
+async function action (range) {
   if (range instanceof program.Command) {
     return error('no range given!')
   }
@@ -30,6 +40,11 @@ function action (range) {
   range = range.split('..').map(Number) || []
   if (!validate(range)) {
     return error('invalid range!')
+  }
+
+  if (this.output) {
+    console.log(require('util').inspect(this.output))
+    env.writeStream = fs.createWriteStream(this.output)
   }
 
   // These should make it easier to tweak for other sources
@@ -63,19 +78,29 @@ function action (range) {
       })
 
     this.verbose && process.stdout.write('\n')
-    if (found) { console.log(url) }
+    if (found) { log(url) }
 
     // Continue to next iteration
     if (!found && j < extNames.length - 1) { return run(i, j + 1) }
-    if (i < range[1]) { return run(i + 1, 0) }
+    if (i < range[1]) {
+      if (j > 0) {
+        // Move last extension to the front of the array
+        extNames.splice(j, 1)
+        extNames.unshift(ext)
+        this.verbose && console.log(`info: prioritizing '${ext}' for next iteration`)
+      }
+      return run(i + 1, 0)
+    }
     return true
   }
 
   run(range[0], 0)
     .then(() => {
+      env.writeStream && env.writeStream.end()
       process.exit(0)
     })
     .catch(error => {
+      env.writeStream && env.writeStream.end()
       console.error(error)
       process.exit(1)
     })
@@ -86,6 +111,7 @@ program
   .usage('[options] <range>')
   .description('A simple utility to fetch image URLs from nekos.life by inputting IDs range.')
   .option('-v, --verbose', 'Verbose output')
+  .option('-O, --output <path>', 'An output file to write all the URLs into')
   .action(action)
 
 program.on('--help', () => {
