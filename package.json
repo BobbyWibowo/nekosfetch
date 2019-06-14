@@ -6,7 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "commander": "^2.18.0",
-    "node-fetch": "^2.2.0"
+    "node-fetch": "^2.6.0"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
