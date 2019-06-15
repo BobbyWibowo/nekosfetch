@@ -5,7 +5,7 @@
   "author": "Bobby Wibowo",
   "license": "MIT",
   "dependencies": {
-    "commander": "^2.18.0",
+    "commander": "^2.20.0",
     "node-fetch": "^2.6.0"
   },
   "devDependencies": {
